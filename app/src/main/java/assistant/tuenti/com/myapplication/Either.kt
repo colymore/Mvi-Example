@@ -8,14 +8,14 @@ class Either<A, B> private constructor(private val left: A?, private val right: 
 	private fun isLeft() = left != null
 	private fun isRight() = right != null
 
-	fun getLeft(): A {
+	private fun getLeft(): A {
 		if (left == null) {
 			throw NoSuchElementException("No left value present")
 		}
 		return left
 	}
 
-	fun getRight(): B {
+	private fun getRight(): B {
 		if (right == null) {
 			throw NoSuchElementException("No right value present")
 		}

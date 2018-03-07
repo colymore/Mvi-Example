@@ -12,7 +12,6 @@ import assistant.tuenti.com.myapplication.SpeechToTextUseCase.SpeechState.FinalR
 import assistant.tuenti.com.myapplication.SpeechToTextUseCase.SpeechState.Init
 import assistant.tuenti.com.myapplication.SpeechToTextUseCase.SpeechState.PartialResult
 import assistant.tuenti.com.myapplication.SpeechToTextUseCase.SpeechState.SpeechError
-import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.concurrent.TimeUnit
 
@@ -86,13 +85,9 @@ class AssistantMainPresenter {
 	private fun processNotificationsIntent(assistantMainView: AssistantView): Observable<PartialState> = assistantMainView
 		.alfredIntent()
 		.flatMap { getNotificationsUseCase.getNotifications() }
-		.mergeWith(Observable.timer(30, TimeUnit.SECONDS).flatMap({
-			Observable.just(
-				Either.left<GeneralError, List<String>>(
-					GeneralError
-				)
-			)
-		}))
+		.mergeWith(Observable.timer(30, TimeUnit.SECONDS)
+			.flatMap({ Observable.just(Either.left<GeneralError, List<String>>(GeneralError)) })
+		)
 		.take(1)
 		.map { it.fold({ NotificationError }, { Notifications(it) }) }
 		.startWith(Waiting)
@@ -106,73 +101,6 @@ class AssistantMainPresenter {
 		.startWith(Waiting)
 }
 
-sealed class PartialState {
-
-	sealed class InfoPartialState {
-		object Waiting : PartialState(), Cloneable
-		object Timeout : PartialState()
-		data class HelpTopics(val responses: List<String>) : PartialState()
-	}
-
-	sealed class NotificationPartialState {
-		object NotificationError : PartialState()
-		data class Notifications(val responses: List<String>) : PartialState()
-	}
-
-	sealed class ListeningPartialState {
-		object ListeningError : PartialState()
-		object ListeningStart : PartialState()
-		data class PartialResult(val value: String) : PartialState()
-		data class FinalResult(val value: String) : PartialState()
-	}
-
-	sealed class ShowingErrorPartialState {
-		data class SendMessageError(val message: String) : PartialState()
-		data class GeneralError(val message: String) : PartialState()
-	}
-
-	sealed class ShowResponsePartialState {
-		data class ShowResponse(val response: Response) : PartialState()
-	}
-
-	data class ThinkingState(val message: String) : PartialState()
-
-	object SendingQuestion : PartialState()
-	object ShowKeyboard : PartialState()
-	object InitialState : PartialState()
-
-}
-
-interface HelpUseCase {
-	fun getCategories(): Observable<Either<GeneralError, List<String>>>
-}
-
-interface NotificationsUseCase {
-	fun getNotifications(): Observable<Either<GeneralError, List<String>>>
-}
-
-interface SendQuestion {
-	fun send(question: String): Completable
-}
-
-interface Responses {
-	fun get(): Observable<Either<GeneralError, Response>>
-}
-
-interface SpeechToTextUseCase {
-
-	sealed class SpeechState {
-		object SpeechError : SpeechState()
-		object Init : SpeechState()
-		object PartialResult : SpeechState()
-		object FinalResult : SpeechState()
-	}
-
-	fun speech(): Observable<SpeechState>
-}
-
-object GeneralError
-object Response
 
 
 
