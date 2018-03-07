@@ -95,7 +95,8 @@ class AssistantMainPresenter {
 	private fun processAlfredIntent(assistantMainView: AssistantView): Observable<PartialState> = assistantMainView
 		.alfredIntent()
 		.flatMap { getHelp.getCategories() }
-		.mergeWith(Observable.timer(30, TimeUnit.SECONDS).flatMap({ Observable.just(Either.left<GeneralError, List<String>>(GeneralError)) }))
+		.mergeWith(Observable.timer(30, TimeUnit.SECONDS)
+			.flatMap({ Observable.just(Either.left<GeneralError, List<String>>(GeneralError)) }))
 		.take(1)
 		.map { it.fold({ Timeout }, { HelpTopics(it) }) }
 		.startWith(Waiting)

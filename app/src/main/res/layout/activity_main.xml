@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context="assistant.tuenti.com.myapplication.MainActivity">
+
+	<Button
+			android:text="Ayuda"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/helpbtn"
+			app:layout_constraintStart_toStartOf="parent" app:layout_constraintBaseline_toBaselineOf="@+id/micbtn"
+			app:layout_constraintEnd_toStartOf="@+id/micbtn" android:layout_marginEnd="8dp"/>
+	<Button
+			android:text="Mic"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/micbtn"
+			app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toEndOf="@+id/helpbtn" app:layout_constraintEnd_toStartOf="@+id/textbtn"
+			android:layout_marginEnd="3dp" android:layout_marginBottom="24dp"/>
+	<Button
+			android:text="Text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/textbtn"
+			app:layout_constraintBaseline_toBaselineOf="@+id/micbtn" app:layout_constraintStart_toEndOf="@+id/micbtn" android:layout_marginEnd="5dp"
+			app:layout_constraintEnd_toEndOf="parent"/>
+	<FrameLayout
+			android:layout_width="368dp"
+			android:layout_height="0dp" android:id="@+id/container" android:layout_marginEnd="8dp"
+			app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+			android:layout_marginTop="8dp" android:layout_marginBottom="80dp"
+			app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="1.0" app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/not">
+
+	</FrameLayout>
+	<Button
+			android:text="Notification"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:id="@+id/not"
+			app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginBottom="2dp"
+			app:layout_constraintBottom_toTopOf="@+id/container"/>
+</android.support.constraint.ConstraintLayout>
