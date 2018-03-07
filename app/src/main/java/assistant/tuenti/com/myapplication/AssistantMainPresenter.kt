@@ -28,7 +28,7 @@ class AssistantMainPresenter {
 
 	fun bindIntents(assistantMainView: AssistantView) {
 
-		val alfredIntent: Observable<PartialState> = processAlfredIntent(assistantMainView)
+		val helpIntent: Observable<PartialState> = processHelpIntent(assistantMainView)
 		val notificationsIntent: Observable<PartialState> = processNotificationsIntent(assistantMainView)
 		val microphoneIntent: Observable<PartialState> = processMicrophoneIntent(assistantMainView)
 		val sendRequestIntent: Observable<PartialState> = progressSendRequestIntent(assistantMainView)
@@ -38,7 +38,7 @@ class AssistantMainPresenter {
 		val allIntents: Observable<PartialState> =
 			Observable.merge(
 				listOf(
-					alfredIntent,
+					helpIntent,
 					notificationsIntent,
 					microphoneIntent,
 					sendRequestIntent,
@@ -92,7 +92,7 @@ class AssistantMainPresenter {
 		.map { it.fold({ NotificationError }, { Notifications(it) }) }
 		.startWith(Waiting)
 
-	private fun processAlfredIntent(assistantMainView: AssistantView): Observable<PartialState> = assistantMainView
+	private fun processHelpIntent(assistantMainView: AssistantView): Observable<PartialState> = assistantMainView
 		.alfredIntent()
 		.flatMap { getHelp.getCategories() }
 		.mergeWith(Observable.timer(30, TimeUnit.SECONDS)
